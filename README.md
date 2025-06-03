@@ -2,7 +2,7 @@
 
 This repository contains the source code and assets for a machine learning-powered Shiny app built for the STATS 418 final project.
 
-The project predicts the species of crow from which a bird recording originates, based on location (country) and season (fall, winter, spring, summer) of the recording. A random forest classifier was trained on metadata from the [xeno-canto](https://xeno-canto.org) bird sound database. The app displays species predictions along with audio recordings, model performance metrics, and an interactive data table.
+The project predicts the species of crow from which a bird recording originates, based on location (country) and season (fall, winter, spring, summer) of the recording. A random forest classifier was trained on metadata from the [xeno-canto](https://xeno-canto.org) bird sound database. The app displays species predictions along with audio recordings, model performance metrics, and an interactive data table. Note that the app may take up to a minute to fully load.
 
 Access the live Shiny app here:  
 👉 [https://96upvf-samantha-wavell.shinyapps.io/Stats-418-Final-Project-App/](https://96upvf-samantha-wavell.shinyapps.io/Stats-418-Final-Project-App/)

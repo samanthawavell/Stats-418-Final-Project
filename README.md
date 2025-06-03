@@ -42,4 +42,48 @@ Access the live Shiny app here:
 
 ---
 
+## 🔌 API Access & Examples
+
+The API is deployed on **Google Cloud Run** and can be accessed directly using tools like `curl` or programmatically from any language that supports HTTP.
+
+### API Base URL
+
+Access the API here:  
+👉 [[https://96upvf-samantha-wavell.shinyapps.io/Stats-418-Final-Project-App/]([https://corvus-api-495836339950.us-central1.run.app/](https://corvus-api-495836339950.us-central1.run.app/))
+
+#### Check if API is running
+curl https://corvus-api-495836339950.us-central1.run.app/
+# Response: "Corvus API is up"
+
+#### Predict species
+You must POST a JSON payload with "cnt" (country) and "season" values.
+
+Example 1 – Predict for Canada in Winter:
+
+curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "Canada", "season": "Winter"}'
+# Response: "{"top_3_predictions":[{"probability":0.5170714740986264,"species":"Northern Raven"},{"probability":0.4829285259013736,"species":"American Crow"},{"probability":0.0,"species":"Hispaniolan Palm Crow"}]}"
+
+Example 2 – Predict for India in Summer:
+
+curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "India", "season": "Summer"}'
+# Response: "{"top_3_predictions":[{"probability":0.4874270753584224,"species":"House Crow"},{"probability":0.21222693036237952,"species":"Large-billed Crow"},{"probability":0.20004049252261363,"species":"Indian Jungle Crow"}]}"
+
+#### Get all model metrics
+curl https://corvus-api-495836339950.us-central1.run.app/metrics
+
+#### Test API locally using the files in this repository
+curl http://localhost:8080/
+curl -X POST http://localhost:8080/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "India", "season": "Summer"}'
+curl -X POST http://localhost:8080/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "Canada", "season": "Winter"}'
+
+---
+
 © 2025 Samantha Wavell

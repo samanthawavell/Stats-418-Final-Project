@@ -20,6 +20,7 @@ Access the live Shiny app here:
 | `Stats_418_Final_Project_Writeup.pdf` | Final project writeup detailing exploratory data analysis, methodology, and results. |
 | `api.py` | Flask-based REST API that serves the trained model’s predictions and metrics. |
 | `app_R.R` | The main R Shiny app script that loads data, interacts with the API, and displays outputs. |
+| `corvus_cache.pkl` | File containing a cleaned and preprocessed dataset of crow audio recordings data downloaded from the xeno-canto API. |
 | `requirements.txt` | Python dependencies required for building and running the API. |
 | `rf_model_training.py` | Python script that trains the random forest model, encodes data, evaluates performance, and caches results. |
 
@@ -28,12 +29,13 @@ Access the live Shiny app here:
 ## How It Works
 
 1. **Model Training (`rf_model_training.py`)**
-   - Trains a random forest classifier on crow species recordings.
+   - Uses the `corvus_cache.pkl` data to train a random forest classifier on crow species recordings.
    - Encodes categorical variables and computes performance metrics.
    - Saves model and metadata for API use.
 
 2. **API (`api.py`)**
    - A Flask web server that returns species predictions and model performance statistics.
+   - On startup, the script checks for the presence of `corvus_cache.pkl`. If it does not exist, the API automatically downloads the data from the xeno-canto API, extracts metadata, adds a seasonal label based on the recording date, filters by country-season combinations with sufficient recordings, and saves the resulting dataset to `corvus_cache.pkl`.
    - Can be containerized using the included Dockerfile and deployed to Google Cloud Run.
 
 3. **Shiny App (`app_R.R`)**

@@ -1,8 +1,8 @@
 # Stats 418 Final Project
 
-This repository contains the source code and assets for a machine learning-powered Shiny app built for the Stats 418 final project.
+This repository contains the source code and assets for an API-powered Shiny app built for the Stats 418 final project.
 
-The project predicts the species of crow from which a bird recording originates, based on location (country) and season (fall, winter, spring, summer) of the recording. A random forest classifier was trained on metadata from the [xeno-canto](https://xeno-canto.org) bird sound database. The app displays species predictions along with audio recordings, model performance metrics, and an interactive data table. Note that the app may take up to a minute to fully load.
+The app predicts the species of crow from which a bird recording originates, based on location (country) and season (fall, winter, spring, summer) of the recording. A random forest classifier was trained on metadata from the [xeno-canto](https://xeno-canto.org) bird sound database. The app displays species predictions along with audio recordings, model performance metrics, and an interactive data table. Note that the app may take up to a minute to fully load.
 
 Access the live Shiny app here:  
 [https://96upvf-samantha-wavell.shinyapps.io/Stats-418-Final-Project-App/](https://96upvf-samantha-wavell.shinyapps.io/Stats-418-Final-Project-App/)
@@ -17,6 +17,7 @@ Access the live Shiny app here:
 | `Dockerfile` | Docker configuration to containerize the API used by the Shiny app. |
 | `Stats418_ProjectProposal_SamanthaWavell.pdf` | Project proposal slides submitted earlier in the quarter. |
 | `Stats418_ProjectSlides_SamanthaWavell.pdf` | Final presentation slides summarizing the app, model, and results. |
+| `Stats_418_Final_Project_Writeup.pdf` | Final project writeup detailing exploratory data analysis, methodology, and results. |
 | `api.py` | Flask-based REST API that serves the trained model’s predictions and metrics. |
 | `app_R.R` | The main R Shiny app script that loads data, interacts with the API, and displays outputs. |
 | `requirements.txt` | Python dependencies required for building and running the API. |

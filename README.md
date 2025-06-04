@@ -56,26 +56,25 @@ Response: "Corvus API is up"
 You must POST a JSON payload with "cnt" (country) and "season" values.
 
 #### Example: Predict for Canada in Winter:
-
-```curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \ -H "Content-Type: application/json" \ -d '{"cnt": "Canada", "season": "Winter"}'```
-
+```bash
+curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "Canada", "season": "Winter"}'
+```
 Response: "{"top_3_predictions":[{"probability":0.5170714740986264,"species":"Northern Raven"},{"probability":0.4829285259013736,"species":"American Crow"},{"probability":0.0,"species":"Hispaniolan Palm Crow"}]}"
 
 #### Example: Predict for India in Summer:
-
-```curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \ -H "Content-Type: application/json" \ -d '{"cnt": "India", "season": "Summer"}'```
-
+```bash
+curl -X POST https://corvus-api-495836339950.us-central1.run.app/predict \
+  -H "Content-Type: application/json" \
+  -d '{"cnt": "India", "season": "Summer"}'
+```
 Response: "{"top_3_predictions":[{"probability":0.4874270753584224,"species":"House Crow"},{"probability":0.21222693036237952,"species":"Large-billed Crow"},{"probability":0.20004049252261363,"species":"Indian Jungle Crow"}]}"
 
 ### Get all model metrics
-```curl https://corvus-api-495836339950.us-central1.run.app/metrics```
-
-### Test API locally using the files in this repository
-```curl http://localhost:8080/```
-
-```bash curl -X POST http://localhost:8080/predict \ -H "Content-Type: application/json" \ -d '{"cnt": "India", "season": "Summer"}' ```
-
-```bash curl -X POST http://localhost:8080/predict \ -H "Content-Type: application/json" \ -d '{"cnt": "Canada", "season": "Winter"}' ```
+```bash
+curl https://corvus-api-495836339950.us-central1.run.app/metrics
+```
 
 ---
 

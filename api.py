@@ -3,12 +3,93 @@ import joblib
 import pandas as pd
 import pickle
 import os
+import requests
+import time
+import re
 
 app = Flask(__name__)
 
+def download_corvus_data():
+    print("Downloading data from xeno-canto API...")
+
+    base_url = "https://xeno-canto.org/api/3/recordings"
+    query = "gen:Corvus"
+    key = "f8db79ca359b872c557b07d7d91c50674a2e6709"
+
+    # Get total number of pages
+    first_url = f"{base_url}?query={query}&page=1&key={key}"
+    first_response = requests.get(first_url)
+    if first_response.status_code != 200:
+        raise Exception(f"Initial request failed: {first_response.status_code}")
+    
+    first_data = first_response.json()
+    num_pages = int(first_data["numPages"])
+    print(f"Total pages to fetch: {num_pages}")
+
+    all_records = pd.DataFrame(first_data["recordings"])
+
+    # Loop through remaining pages
+    for page_num in range(2, num_pages + 1):
+        print(f"Fetching page {page_num} ...")
+        time.sleep(0.5)  # Avoid throttling
+
+        url = f"{base_url}?query={query}&page={page_num}&key={key}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            page_data = response.json()
+            page_df = pd.DataFrame(page_data["recordings"])
+            all_records = pd.concat([all_records, page_df], ignore_index=True)
+        else:
+            print(f"Warning: Page {page_num} failed with status {response.status_code}")
+
+    # Add season column
+    def extract_season(date_str):
+        if not isinstance(date_str, str):
+            return None
+        month_match = re.search(r"-(\d{2})-", date_str)
+        if not month_match:
+            return None
+        month = int(month_match.group(1))
+        if month in [1, 2, 3]:
+            return "Winter"
+        elif month in [4, 5, 6]:
+            return "Spring"
+        elif month in [7, 8, 9]:
+            return "Summer"
+        elif month in [10, 11, 12]:
+            return "Fall"
+        else:
+            return None
+
+    all_records["season"] = all_records["date"].apply(extract_season)
+
+    # Filter combinations with at least 10 recordings per country-season
+    filtered = (
+        all_records.dropna(subset=["cnt", "season"])
+        .groupby(["cnt", "season"])
+        .filter(lambda x: len(x) >= 10)
+    )
+
+    # Save as pickle file
+    with open("corvus_cache.pkl", "wb") as f:
+        pickle.dump(filtered, f)
+
+    return filtered
+
+def load_or_download_data():
+    global data_cache
+    if os.path.exists("corvus_cache.pkl"):
+        print("Loading cached data...")
+        with open("corvus_cache.pkl", "rb") as f:
+            data_cache = pickle.load(f)
+    else:
+        data_cache = download_corvus_data()
+
+# Global variables
 model = None
 species_lookup = None
 data_cache = None
+metadata = None
 
 @app.route("/")
 def home():
@@ -73,11 +154,8 @@ def get_metadata():
         return jsonify({"error": "Metadata not available"}), 500
 
 if __name__ == "__main__":
-    # Load cached data
-    if os.path.exists("corvus_cache.pkl"):
-        print("Loading cached data...")
-        with open("corvus_cache.pkl", "rb") as f:
-            data_cache = pickle.load(f)
+    # Load or download data
+    load_or_download_data()
 
     print("Loading model...")
     model = joblib.load("rf_model_cached.joblib")
